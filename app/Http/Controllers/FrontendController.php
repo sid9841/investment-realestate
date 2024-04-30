@@ -55,6 +55,7 @@ class FrontendController extends Controller
             ->get()->groupBy('content.name');
         $data['gateways'] = Gateway::all();
         $data['popularBlogs'] = Blog::with(['details', 'blogCategory.details'])->where('status', 1)->take(3)->latest()->get();
+        $data['allAddress'] = Address::with('details')->where('status', 1)->get();
 
 
         $data['featureProperties'] = ManageProperty::with(['details', 'getAddress.details', 'getInvestment'])->withCount('getReviews')->where('status', 1)->where('is_featured', 1)->whereDate('expire_date','>',now())->inRandomOrder()->limit(3)->orderBy('start_date')->get();
