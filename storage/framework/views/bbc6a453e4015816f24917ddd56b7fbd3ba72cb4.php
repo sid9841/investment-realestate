@@ -8,8 +8,8 @@
                         <div class="overlay h-100">
                             <div class="container h-100">
                                 <div class="row h-100 align-items-center">
-                                    <div class="card text-center col-xl-12">
-                                        <h5 class="text-center mt-4"><span>Buy shares of rental properties, earn monthly income, and watch your money grow</span><br /></h5>
+                                    <div class="card text-center col-xl-12" style="background: url('assets/uploads/content/hero-banner.jpg');background-size: cover">
+                                        <p class="text-center mt-5 fs-4 font-weight-bold" style="color: #4441c8;"><span>Buy shares of rental properties, earn monthly income, and watch your money grow</span><br /></p>
                                         <div class="card-body">
                                             <div class="col-xl-12">
                                                 <div class="text-box">

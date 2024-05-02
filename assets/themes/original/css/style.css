@@ -219,7 +219,7 @@ button {
     transition: 0.4s;
 }
 .btn-custom-small {
-    background: #0ea800;
+    background: #4441c8;
     /*  background-image: var(--gradient);*/
     font-family: "Jost", sans-serif;
     text-transform: uppercase;
@@ -262,7 +262,7 @@ button {
 
 }
 .frombutton{
-    background: green;
+    background: #4441c8;
     padding:10px 50px;
     broder:none;
     outline: none;
