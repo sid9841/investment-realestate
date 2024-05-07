@@ -16,6 +16,8 @@ use App\Models\Language;
 use App\Models\ManageProperty;
 use App\Models\ManagePropertyDetails;
 use App\Models\ManageTime;
+use App\Models\PropertyDrip;
+use App\Models\PropertyDripBatches;
 use Carbon\Carbon;
 use hisorange\BrowserDetect\Exceptions\Exception;
 use Illuminate\Support\Facades\DB;
@@ -193,13 +195,20 @@ class ManagePropertyController extends Controller
             $manageProperty->installment_duration_type = $installment_duration_type;
             $manageProperty->installment_late_fee = $installment_late_fee;
             $manageProperty->profit = $profit;
+            if($reqData['drip_enabled'] == 'on'){
+                $manageProperty->drip_enabled = true;
+            }
+            else{
+                $manageProperty->drip_enabled = false;
+
+            }
             $manageProperty->profit_type = $profit_type;
             $manageProperty->is_capital_back = $is_capital_back;
             $manageProperty->address_id = $reqData['address_id'];
             $manageProperty->location = $reqData['location'];
             $manageProperty->amenity_id = @$reqData['amenity_id'];
             $manageProperty->is_investor = $is_investor;
-            $manageProperty->available_for = $reqData['available_for'];
+//            $manageProperty->available_for = $reqData['available_for'];
             $manageProperty->video = $reqData['video'] == '' ? null : $reqData['video'];
             $manageProperty->is_featured = $reqData['is_featured'];
             $manageProperty->is_available_funding = $reqData['is_available_funding'];
@@ -214,7 +223,22 @@ class ManagePropertyController extends Controller
             }
 
             $saveProperty = $manageProperty->save();
+            if ($reqData['drip_enabled'] == 'on'){
+                foreach(json_decode($reqData['drip_contents_value']) as $dripContent){
+                    $dripContentNew = new PropertyDrip();
+                    $dripContentNew->start_date = $dripContent->start_date;
+                    $dripContentNew->end_date = $dripContent->end_date;
+                    $dripContentNew->manage_property_id = $manageProperty->id;
+                    $dripContentNew->save();
+                    foreach ($dripContent->available_for as $dripAvailable){
+                        $dripAvailableNew = new PropertyDripBatches();
+                        $dripAvailableNew->property_drip_id = $dripContentNew->id;
+                        $dripAvailableNew->badge_id = $dripAvailable;
+                        $dripAvailableNew->save();
+                    }
+                }
 
+            }
             throw_if(!$saveProperty, 'Something went wrong while inserting property information!');
 
             if ($request->hasFile('property_image')) {

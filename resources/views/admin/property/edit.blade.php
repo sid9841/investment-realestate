@@ -93,27 +93,123 @@
                                             </div>
                                         @endif
                                     </div>
+{{--                                    <div class="row mt-4">--}}
+{{--                                        <div class="col-md-12 col-xl-12">--}}
+{{--                                            <label for="before_expiry_date"> @lang('Enable Drip')</label>--}}
+{{--                                            @php--}}
+{{--                                                $available_for =$singlePropertyDetails[1][0]->manageProperty->available_for;--}}
+{{--                                            @endphp--}}
+{{--                                            <select name="available_for[]"--}}
+{{--                                                    class="form-control propertyAvailableFor @error('available_for') is-invalid @enderror"--}}
+{{--                                                    multiple>--}}
+{{--                                                <option disabled>@lang('Choose available for')</option>--}}
+{{--                                                @foreach($allBadges as $badges)--}}
+{{--                                                    <option--}}
+{{--                                                        value="{{ $badges->id }}" {{in_array($badges->id,$available_for) ? 'selected' : ''}}>@lang(optional($badges->details)->rank_name)</option>--}}
+{{--                                                @endforeach--}}
+{{--                                            </select>--}}
+{{--                                            @error('available_for')--}}
+{{--                                            <span class="text-danger">@lang($message)</span>--}}
+{{--                                            @enderror--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+                                    @php
+                                      $drip_enabled = $singlePropertyDetails[1][0]->manageProperty->drip_enabled;
+                                      $dripDB = [];
+                                    @endphp
                                     <div class="row mt-4">
                                         <div class="col-md-12 col-xl-12">
-                                            <label for="before_expiry_date"> @lang('Available for')</label>
-                                            @php
-                                                $available_for =$singlePropertyDetails[1][0]->manageProperty->available_for;
-                                            @endphp
-                                            <select name="available_for[]"
-                                                    class="form-control propertyAvailableFor @error('available_for') is-invalid @enderror"
-                                                    multiple>
-                                                <option disabled>@lang('Choose ranks')</option>
-                                                @foreach($allBadges as $badges)
-                                                    <option
-                                                        value="{{ $badges->id }}" {{in_array($badges->id,$available_for) ? 'selected' : ''}}>@lang(optional($badges->details)->rank_name)</option>
-                                                @endforeach
-                                            </select>
-                                            @error('available_for')
+                                            <label for="before_expiry_date"> @lang('Enable Drip')</label>
+                                            <input type="checkbox" id="enable_drip" {{$drip_enabled == true ? 'checked' : ''}}  name="drip_enabled">
+                                            @error('drip_enabled')
                                             <span class="text-danger">@lang($message)</span>
                                             @enderror
                                         </div>
                                     </div>
 
+                                    <div class="row mt-4" id="drip_content_div" style="display:{{$drip_enabled == true ? 'block' : 'none'}}">
+                                        <div class="form-group col-md-12">
+                                            <div class="row">
+                                                <div class="col-md-3 col-lg-3">
+                                                    <div class="form-group">
+                                                        <label>@lang('Start Date') <span class="text-danger">*</span></label>
+                                                        <input type="date" name="drip_start_date" id="drip_start_date"
+                                                               value="{{ old('drip_start_date') }}"
+                                                               class="form-control @error('drip_start_date'.'.'.$language->id) is-invalid @enderror">
+                                                        @error('drip_start_date')
+                                                        <span class="text-danger">{{ $message }}</span>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3 col-lg-3">
+                                                    <div class="form-group">
+                                                        <label>@lang('End Date') <span class="text-danger">*</span></label>
+                                                        <input type="date" name="drip_end_date" id="drip_end_date"
+                                                               value="{{ old('drip_end_date') }}"
+                                                               class="form-control @error('drip_end_date'.'.'.$language->id) is-invalid @enderror">
+                                                        @error('drip_end_date')
+                                                        <span class="text-danger">{{ $message }}</span>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="available_for"> @lang('Drip Available For')</label>
+
+                                                        <select name="available_for[]"
+                                                                id="drip_available_for"
+                                                                class="form-control propertyAvailableFor @error('available_for') is-invalid @enderror"
+                                                                multiple>
+                                                            <option disabled>@lang('Choose available for')</option>
+                                                            @foreach($allBadges as $badges)
+                                                                <option
+                                                                    value="{{ $badges->id }}" >@lang(optional($badges->details)->rank_name)</option>
+                                                            @endforeach
+                                                        </select>
+                                                        @error('available_for')
+                                                        <span class="text-danger">@lang($message)</span>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group align-content-center">
+                                                        <button class="btn btn-primary mt-4 " id="add_drip">Add</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <table class=" table table-hover table-striped table-bordered text-center" id="dripContentTable">
+                                                <tr>
+                                                    <td>
+                                                        Start Date
+                                                    </td>
+                                                    <td>
+                                                        End Date
+                                                    </td>
+                                                    <td>Available For</td>
+                                                </tr>
+                                                @foreach($singlePropertyDetails[1][0]->manageProperty->drips as $pDrip)
+                                                    <tr>
+                                                        <td>
+                                                            {{$pDrip->start_date}}
+                                                        </td>
+                                                        <td>
+                                                            {{$pDrip->end_date}}
+                                                        </td>
+                                                        <td>{{$pDrip->available_for->pluck('badge_id')}}</td>
+                                                        <td><a href="#" class="btn btn-primary" id="item-'{{$loop->index}}'" onclick="delete_drip_body({{$loop->index}});return false;">Delete</a></td>
+                                                    </tr>
+                                                    @php
+                                                        $dripDB[] = ['start_date'=>$pDrip->start_date,'end_date'=>$pDrip->end_date,'available_for'=>$pDrip->available_for->pluck('badge_id')];
+                                                    @endphp
+                                                @endforeach
+
+
+
+                                            </table>
+                                            <input type="hidden" name="drip_contents_value" value="{{json_encode($dripDB)}}" id="drip_contents_value">
+
+                                        </div>
+                                    </div>
 
                                     <div class="row">
                                         <div class="col-md-12 col-xl-12 col-12 property__details">
@@ -769,8 +865,47 @@
             $('select[name=period_duration]').select2({
                 selectOnClose: true
             });
+            $('#drip_available_for').select2({
+                width: '100%',
+                placeholder: '@lang("Select Available For")',
+            });
+
+            $('#add_drip').click(function (e){
+                e.preventDefault();
+                var start_date = $('#drip_start_date').val();
+                var end_date = $('#drip_end_date').val();
+                var available_for = $('#drip_available_for').val();
+                console.log(available_for);
+                var data = {
+                    'start_date': start_date,
+                    'end_date': end_date,
+                    'available_for': available_for,
+                }
+                var jsonData = document.getElementById("drip_contents_value").value;
+                var dataArray = jsonData && jsonData != 'null' ? JSON.parse(jsonData) : [];
+
+                var id = dataArray.length;
+                dataArray.push(data);
+                document.getElementById("drip_contents_value").value = JSON.stringify(dataArray);
+                var html = '<tr>' +
+                    '<td>'+start_date+'</td>' +
+                    '<td>'+end_date+'</td>' +
+                    '<td>'+available_for+'</td>' +
+                    '<td><a href="#" class="btn btn-primary" id="item-'+id+'" onclick="delete_drip_body('+id+');return false;">Delete</a></td>' +
+                    '</tr>';
+                $('#dripContentTable').append(html);
+            });
+            $('#enable_drip').click(function (){
+                if($('#enable_drip').is(':checked')){
+                    $('#drip_content_div').css('display','block');
+                }else{
+                    $('#drip_content_div').css('display','none  ');
+
+                }
+            });
 
         });
+
     </script>
 
 @endpush

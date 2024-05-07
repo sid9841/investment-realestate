@@ -15,7 +15,7 @@ class ManageProperty extends Model
     protected $guarded = ['id'];
     protected $dates   = ['deleted_at', 'start_date', 'expire_date'];
 
-    protected $casts = ['amenity_id' => 'array','available_for'=>'array'];
+    protected $casts = ['amenity_id' => 'array'];
 
 
     protected $appends = ['investmentAmount', 'limitamenity', 'allamenity', 'managetime'];
@@ -35,6 +35,10 @@ class ManageProperty extends Model
     public function language()
     {
         return $this->hasMany(Language::class, 'language_id', 'id');
+    }
+    public function drips()
+    {
+        return $this->hasMany(PropertyDrip::class, 'manage_property_id', 'id');
     }
 
     public function details()

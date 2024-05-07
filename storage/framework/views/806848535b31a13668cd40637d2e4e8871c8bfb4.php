@@ -134,29 +134,33 @@ unset($__errorArgs, $__bag); ?>
                                             </div>
                                         <?php endif; ?>
                                     </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                    <?php
+                                      $drip_enabled = $singlePropertyDetails[1][0]->manageProperty->drip_enabled;
+                                      $dripDB = [];
+                                    ?>
                                     <div class="row mt-4">
                                         <div class="col-md-12 col-xl-12">
-                                            <label for="before_expiry_date"> <?php echo app('translator')->get('Available for'); ?></label>
-                                            <?php
-                                                $available_for =$singlePropertyDetails[1][0]->manageProperty->available_for;
-                                            ?>
-                                            <select name="available_for[]"
-                                                    class="form-control propertyAvailableFor <?php $__errorArgs = ['available_for'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?>"
-                                                    multiple>
-                                                <option disabled><?php echo app('translator')->get('Choose ranks'); ?></option>
-                                                <?php $__currentLoopData = $allBadges; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $badges): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                    <option
-                                                        value="<?php echo e($badges->id); ?>" <?php echo e(in_array($badges->id,$available_for) ? 'selected' : ''); ?>><?php echo app('translator')->get(optional($badges->details)->rank_name); ?></option>
-                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                            </select>
-                                            <?php $__errorArgs = ['available_for'];
+                                            <label for="before_expiry_date"> <?php echo app('translator')->get('Enable Drip'); ?></label>
+                                            <input type="checkbox" id="enable_drip" <?php echo e($drip_enabled == true ? 'checked' : ''); ?>  name="drip_enabled">
+                                            <?php $__errorArgs = ['drip_enabled'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
@@ -169,6 +173,133 @@ unset($__errorArgs, $__bag); ?>
                                         </div>
                                     </div>
 
+                                    <div class="row mt-4" id="drip_content_div" style="display:<?php echo e($drip_enabled == true ? 'block' : 'none'); ?>">
+                                        <div class="form-group col-md-12">
+                                            <div class="row">
+                                                <div class="col-md-3 col-lg-3">
+                                                    <div class="form-group">
+                                                        <label><?php echo app('translator')->get('Start Date'); ?> <span class="text-danger">*</span></label>
+                                                        <input type="date" name="drip_start_date" id="drip_start_date"
+                                                               value="<?php echo e(old('drip_start_date')); ?>"
+                                                               class="form-control <?php $__errorArgs = ['drip_start_date'.'.'.$language->id];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>">
+                                                        <?php $__errorArgs = ['drip_start_date'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3 col-lg-3">
+                                                    <div class="form-group">
+                                                        <label><?php echo app('translator')->get('End Date'); ?> <span class="text-danger">*</span></label>
+                                                        <input type="date" name="drip_end_date" id="drip_end_date"
+                                                               value="<?php echo e(old('drip_end_date')); ?>"
+                                                               class="form-control <?php $__errorArgs = ['drip_end_date'.'.'.$language->id];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>">
+                                                        <?php $__errorArgs = ['drip_end_date'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                        <span class="text-danger"><?php echo e($message); ?></span>
+                                                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label for="available_for"> <?php echo app('translator')->get('Drip Available For'); ?></label>
+
+                                                        <select name="available_for[]"
+                                                                id="drip_available_for"
+                                                                class="form-control propertyAvailableFor <?php $__errorArgs = ['available_for'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>"
+                                                                multiple>
+                                                            <option disabled><?php echo app('translator')->get('Choose available for'); ?></option>
+                                                            <?php $__currentLoopData = $allBadges; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $badges): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                <option
+                                                                    value="<?php echo e($badges->id); ?>" ><?php echo app('translator')->get(optional($badges->details)->rank_name); ?></option>
+                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                        </select>
+                                                        <?php $__errorArgs = ['available_for'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                                        <span class="text-danger"><?php echo app('translator')->get($message); ?></span>
+                                                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group align-content-center">
+                                                        <button class="btn btn-primary mt-4 " id="add_drip">Add</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <table class=" table table-hover table-striped table-bordered text-center" id="dripContentTable">
+                                                <tr>
+                                                    <td>
+                                                        Start Date
+                                                    </td>
+                                                    <td>
+                                                        End Date
+                                                    </td>
+                                                    <td>Available For</td>
+                                                </tr>
+                                                <?php $__currentLoopData = $singlePropertyDetails[1][0]->manageProperty->drips; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $pDrip): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                    <tr>
+                                                        <td>
+                                                            <?php echo e($pDrip->start_date); ?>
+
+                                                        </td>
+                                                        <td>
+                                                            <?php echo e($pDrip->end_date); ?>
+
+                                                        </td>
+                                                        <td><?php echo e($pDrip->available_for->pluck('badge_id')); ?></td>
+                                                        <td><a href="#" class="btn btn-primary" id="item-'<?php echo e($loop->index); ?>'" onclick="delete_drip_body(<?php echo e($loop->index); ?>);return false;">Delete</a></td>
+                                                    </tr>
+                                                    <?php
+                                                        $dripDB[] = ['start_date'=>$pDrip->start_date,'end_date'=>$pDrip->end_date,'available_for'=>$pDrip->available_for->pluck('badge_id')];
+                                                    ?>
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+
+
+                                            </table>
+                                            <input type="hidden" name="drip_contents_value" value="<?php echo e(json_encode($dripDB)); ?>" id="drip_contents_value">
+
+                                        </div>
+                                    </div>
 
                                     <div class="row">
                                         <div class="col-md-12 col-xl-12 col-12 property__details">
@@ -1027,8 +1158,47 @@ unset($__errorArgs, $__bag); ?>
             $('select[name=period_duration]').select2({
                 selectOnClose: true
             });
+            $('#drip_available_for').select2({
+                width: '100%',
+                placeholder: '<?php echo app('translator')->get("Select Available For"); ?>',
+            });
+
+            $('#add_drip').click(function (e){
+                e.preventDefault();
+                var start_date = $('#drip_start_date').val();
+                var end_date = $('#drip_end_date').val();
+                var available_for = $('#drip_available_for').val();
+                console.log(available_for);
+                var data = {
+                    'start_date': start_date,
+                    'end_date': end_date,
+                    'available_for': available_for,
+                }
+                var jsonData = document.getElementById("drip_contents_value").value;
+                var dataArray = jsonData && jsonData != 'null' ? JSON.parse(jsonData) : [];
+
+                var id = dataArray.length;
+                dataArray.push(data);
+                document.getElementById("drip_contents_value").value = JSON.stringify(dataArray);
+                var html = '<tr>' +
+                    '<td>'+start_date+'</td>' +
+                    '<td>'+end_date+'</td>' +
+                    '<td>'+available_for+'</td>' +
+                    '<td><a href="#" class="btn btn-primary" id="item-'+id+'" onclick="delete_drip_body('+id+');return false;">Delete</a></td>' +
+                    '</tr>';
+                $('#dripContentTable').append(html);
+            });
+            $('#enable_drip').click(function (){
+                if($('#enable_drip').is(':checked')){
+                    $('#drip_content_div').css('display','block');
+                }else{
+                    $('#drip_content_div').css('display','none  ');
+
+                }
+            });
 
         });
+
     </script>
 
 <?php $__env->stopPush(); ?>

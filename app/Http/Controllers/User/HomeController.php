@@ -1883,7 +1883,38 @@ class HomeController extends Controller
 
     public function propertyMarket($type = null)
     {
-        $data['properties'] = ManageProperty::with(['details', 'getInvestment', 'getAddress.details', 'getReviews'])
+
+        $query =ManageProperty::with(['details', 'getInvestment', 'getAddress.details', 'getReviews']);
+        $query->where(function ($query){
+            // Retrieve all properties with drip_enabled false
+            $query->where('drip_enabled', 0)
+                ->orWhere(function ($query){
+                    // Filter properties with drip_enabled true based on date and allowed badge
+                    $query->where('drip_enabled', 1)
+                        ->whereHas('drips', function ($subQuery) {
+                            // Filter properties based on date
+                            $subQuery->whereDate('end_date', '>=', now())
+                                ->whereHas('available_for', function ($nestedSubQuery) {
+                                    // Filter properties based on allowed badge
+                                    $nestedSubQuery->where('badge_id', '=', Auth::user()->last_level);
+                                });
+                        });
+                });
+        });
+//        $query->when(function ($query) {
+//                return $query->where('drip_enabled', 0);
+//            }, function ($query)  {
+//                // Apply filtering based on user badge and date
+//                $query->whereHas('drips', function ($subQuery) {
+//                    // Filter properties based on date and allowed badge
+//                    $subQuery->whereDate('end_date', '<=', now())
+//                        ->whereHas('available_for', function ($nestedSubQuery) {
+//                            $nestedSubQuery->where('badge_id', '=', Auth::user()->last_level);
+//                        });
+//                });
+//            });
+
+        $data['properties'] = $query
             ->withCount('getReviews')
             ->withCount('getFavourite')
             ->where('expire_date', '>', now())

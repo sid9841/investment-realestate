@@ -97,6 +97,24 @@ class RegisterController extends Controller
         return view(template().'auth.register', compact('sponsor', 'countries','country_code'));
 
     }
+    public function registerReferral(Request $request)
+    {
+        if (config('basic.registration') == 0) {
+            return redirect('/')->with('warning', 'Registration Has Been Disabled.');
+        }
+
+        session()->put('sponsor', $request->sponsor);
+        $sponsor = $request->sponsor;
+        $info = json_decode(json_encode(getIpInfo()), true);
+        $country_code  = null;
+        if(!empty($info['code'])){
+            $country_code = @$info['code'][0];
+        }
+        $countries = config('country');
+
+        return view(template().'auth.referralscreen', compact('sponsor', 'countries','country_code'));
+
+    }
 
 
     /**
@@ -276,7 +294,6 @@ class RegisterController extends Controller
             ]);
         }
     }
-
     protected function guard()
     {
         return Auth::guard();

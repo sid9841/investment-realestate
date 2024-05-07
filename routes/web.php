@@ -35,6 +35,8 @@ Route::group(['middleware' => ['auth:admin']], function () {
 
 Route::group(['middleware' => ['guest']], function () {
     Route::get('register/{sponsor?}', 'Auth\RegisterController@sponsor')->name('register.sponsor');
+    Route::post('registerReferral', 'Auth\RegisterController@registerReferral')->name('registerReferral');
+
 });
 
 Route::group(['middleware' => ['auth', 'Maintenance'], 'prefix' => 'user', 'as' => 'user.'], function () {
