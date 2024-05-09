@@ -306,6 +306,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
         /*===Manage Proposals ====*/
         Route::get('/proposals', 'Admin\ProposalController@index')->name('proposals');
         Route::get('/create-proposal', 'Admin\ProposalController@create')->name('createProposal');
+        Route::get('/view-proposal/{id}', 'Admin\ProposalController@detail')->name('viewProposal');
         Route::get('/edit-proposal/{id}', 'Admin\ProposalController@edit')->name('editProposal');
         Route::post('/update-proposal/{id}', 'Admin\ProposalController@update')->name('updateProposal');
         Route::post('/proposal-store', 'Admin\ProposalController@store')->name('storeProposal');
@@ -318,6 +319,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
         Route::get('/estimates', 'Admin\EstimateController@index')->name('estimates');
         Route::get('/create-estimate', 'Admin\EstimateController@create')->name('createEstimate');
         Route::post('/estimate-store', 'Admin\EstimateController@store')->name('storeEstimate');
+        Route::get('/view-estimate/{id}', 'Admin\EstimateController@detail')->name('viewEstimate');
+
         Route::get('/edit-estimate/{id}', 'Admin\EstimateController@edit')->name('editEstimate');
         Route::post('/update-estimate/{id}', 'Admin\EstimateController@update')->name('updateEstimate');
         Route::get('/delete-estimate/{id}', 'Admin\EstimateController@destroy')->name('deleteEstimate');
@@ -327,6 +330,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
         Route::get('/create-invoice', 'Admin\InvoiceController@create')->name('createInvoice');
         Route::post('/invoice-store', 'Admin\InvoiceController@store')->name('storeInvoice');
         Route::get('/edit-invoice/{id}', 'Admin\InvoiceController@edit')->name('editInvoice');
+        Route::get('/view-invoice/{id}', 'Admin\InvoiceController@detail')->name('viewInvoice');
         Route::post('/update-invoice/{id}', 'Admin\InvoiceController@update')->name('updateInvoice');
         Route::get('/delete-invoice/{id}', 'Admin\InvoiceController@destroy')->name('deleteInvoice');
 

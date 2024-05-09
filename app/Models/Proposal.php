@@ -14,4 +14,5 @@ class Proposal extends Model
     public function items(){
         return $this->hasMany('App\Models\ProposalItem','proposal_id');
     }
+
 }

@@ -84,6 +84,16 @@ class EstimateController extends Controller
 
         return view('admin.estimates.create')->with(compact('leads','customers','admins','estimate','items'));
     }
+    public function detail($id)
+    {
+        $estimate = Estimate::find($id);
+        $leads = Leads::get();
+        $customers = User::get();
+        $admins = Admin::get();
+        $items = Items::get();
+
+        return view('admin.estimates.view')->with(compact('leads','customers','admins','estimate','items'));
+    }
     public function update(Request $request, $id){
         $reqData = Purify::clean($request->except('_token', '_method'));
         $estimate = Estimate::find($id);

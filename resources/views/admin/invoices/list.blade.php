@@ -64,7 +64,7 @@
                                 </td>
                             @endif
                             <td data-label="@lang('No.')">
-                                <a href="{{route('admin.user-edit',[$invoice->id])}}" target="_blank">
+                                <a href="{{route('admin.viewInvoice',[$invoice->id])}}" target="_blank">
                                     <div class="d-flex no-block align-items-center">
 
                                         <div class="">INV-{{loopIndex($invoices) + $loop->index}}
@@ -93,6 +93,10 @@
                                             <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
                                         </a>
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                            <a class="dropdown-item" href="{{ route('admin.viewInvoice',$invoice->id) }}">
+                                                <i class="fa fa-eye text-info pr-2"
+                                                   aria-hidden="true"></i> @lang('View')
+                                            </a>
                                             <a class="dropdown-item" href="{{ route('admin.editInvoice',$invoice->id) }}">
                                                 <i class="fa fa-edit text-warning pr-2"
                                                    aria-hidden="true"></i> @lang('Edit')

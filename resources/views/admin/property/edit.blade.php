@@ -196,7 +196,7 @@
                                                             {{$pDrip->end_date}}
                                                         </td>
                                                         <td>{{$pDrip->available_for->pluck('badge_id')}}</td>
-                                                        <td><a href="#" class="btn btn-primary" id="item-'{{$loop->index}}'" onclick="delete_drip_body({{$loop->index}});return false;">Delete</a></td>
+                                                        <td><a href="#" class="btn btn-primary" id="drip_contents-{{$loop->index}}" onclick="delete_drip_body({{$loop->index}});return false;">Delete</a></td>
                                                     </tr>
                                                     @php
                                                         $dripDB[] = ['start_date'=>$pDrip->start_date,'end_date'=>$pDrip->end_date,'available_for'=>$pDrip->available_for->pluck('badge_id')];
@@ -891,7 +891,7 @@
                     '<td>'+start_date+'</td>' +
                     '<td>'+end_date+'</td>' +
                     '<td>'+available_for+'</td>' +
-                    '<td><a href="#" class="btn btn-primary" id="item-'+id+'" onclick="delete_drip_body('+id+');return false;">Delete</a></td>' +
+                    '<td><a href="#" class="btn btn-primary" id="drip_contents-'+id+'" onclick="delete_drip_body('+id+');return false;">Delete</a></td>' +
                     '</tr>';
                 $('#dripContentTable').append(html);
             });
@@ -904,7 +904,19 @@
                 }
             });
 
+
         });
+        function delete_drip_body(id){
+            console.log(id);
+            var jsonData = document.getElementById("drip_contents_value").value;
+
+            // Convert the existing JSON data to an array, or initialize an empty array if it's the first data
+            var dataArray = jsonData != 'null' ? JSON.parse(jsonData) : [];
+            dataArray.splice(id,1);
+            document.getElementById("drip_contents_value").value = JSON.stringify(dataArray);
+            $("#drip_contents-"+id).closest("tr").remove();
+            return false;
+        }
 
     </script>
 

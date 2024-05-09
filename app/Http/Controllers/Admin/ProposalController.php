@@ -96,6 +96,16 @@ class ProposalController extends Controller
         $admins = Admin::get();
         return view('admin.proposals.create')->with(compact('leads','customers','admins','proposal','items'));
     }
+    public function detail(Request $request,$id)
+    {
+        $proposal = Proposal::find($id);
+        $leads = Leads::get();
+        $customers = User::get();
+        $items = Items::get();
+
+        $admins = Admin::get();
+        return view('admin.proposals.view')->with(compact('leads','customers','admins','proposal','items'));
+    }
     public function update(Request $request, $id)
     {
         $reqData = Purify::clean($request->except('_token', '_method'));

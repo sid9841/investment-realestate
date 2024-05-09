@@ -48,6 +48,16 @@ class InvoiceController extends Controller
 
         return view('admin.invoices.create')->with(compact('leads','customers','admins','invoice','items'));
     }
+    public function detail($id)
+    {
+        $invoice = Invoice::find($id);
+        $leads = Leads::get();
+        $customers = User::get();
+        $admins = Admin::get();
+        $items = Items::get();
+
+        return view('admin.invoices.view')->with(compact('leads','customers','admins','invoice','items'));
+    }
     public function store(Request $request)
     {
         $reqData = Purify::clean($request->except('_token', '_method'));

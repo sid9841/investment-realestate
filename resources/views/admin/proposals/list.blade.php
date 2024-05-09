@@ -66,7 +66,7 @@
                                 </td>
                             @endif
                             <td data-label="@lang('No.')">
-                                <a href="{{route('admin.user-edit',[$proposal->id])}}" target="_blank">
+                                <a href="{{route('admin.viewProposal',[$proposal->id])}}" target="_blank">
 
                                 Proposal-{{$proposal->id}}
                                 </a>
@@ -100,6 +100,10 @@
                                             <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
                                         </a>
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                            <a class="dropdown-item" href="{{ route('admin.viewProposal',$proposal->id) }}">
+                                                <i class="fa fa-eye text-info pr-2"
+                                                   aria-hidden="true"></i> @lang('View')
+                                            </a>
                                             <a class="dropdown-item" href="{{ route('admin.editProposal',$proposal->id) }}">
                                                 <i class="fa fa-edit text-warning pr-2"
                                                    aria-hidden="true"></i> @lang('Edit')
