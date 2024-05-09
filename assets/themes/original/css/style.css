@@ -5894,6 +5894,9 @@ a.btn-custom {
 }
 
 @media (max-width: 1366px) {
+    .home-section{
+        height:60vh;
+    }
     .home-section .img-wrapper .img-box {
         width: 600px;
         height: 600px;
