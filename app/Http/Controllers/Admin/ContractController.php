@@ -42,7 +42,8 @@ class ContractController extends Controller
                'customer_id'=> $reqData['customer_id'],
                'subject'=>$reqData['subject'],
                'contract_value'=>$reqData['contract_value'],
-               'type'=>$reqData['contract_type'],
+               'contract_type'=>$reqData['contract_type'],
+               'content'=>$reqData['content'],
                'start_date'=>$reqData['issue_date'],
                'end_date'=>$reqData['open_till_date'],
                'description'=>$reqData['description'],
@@ -59,6 +60,13 @@ class ContractController extends Controller
         $admins = Admin::get();
         $contract = Contract::find($id);
         return view('admin.contracts.create')->with(compact('leads','customers','admins','contract'));
+    }
+    public function detail($id){
+        $leads = Leads::get();
+        $customers = User::get();
+        $admins = Admin::get();
+        $contract = Contract::find($id);
+        return view('admin.contracts.view')->with(compact('leads','customers','admins','contract'));
     }
     public function update(Request $request, $id){
         $contract = Contract::find($id);

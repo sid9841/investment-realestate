@@ -274,6 +274,7 @@ unset($__errorArgs, $__bag); ?>
                                                         End Date
                                                     </td>
                                                     <td>Available For</td>
+                                                    <td></td>
                                                 </tr>
                                                 <?php $__currentLoopData = $singlePropertyDetails[1][0]->manageProperty->drips; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $pDrip): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                     <tr>
@@ -285,7 +286,7 @@ unset($__errorArgs, $__bag); ?>
                                                             <?php echo e($pDrip->end_date); ?>
 
                                                         </td>
-                                                        <td><?php echo e($pDrip->available_for->pluck('badge_id')); ?></td>
+                                                        <td><?php $__currentLoopData = $pDrip->available_for; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $ppp): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?> <?php echo e($ppp->badge->details->rank_name); ?> <br><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?></td>
                                                         <td><a href="#" class="btn btn-primary" id="drip_contents-<?php echo e($loop->index); ?>" onclick="delete_drip_body(<?php echo e($loop->index); ?>);return false;">Delete</a></td>
                                                     </tr>
                                                     <?php

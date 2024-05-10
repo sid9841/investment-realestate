@@ -346,6 +346,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
         Route::get('/create-contract', 'Admin\ContractController@create')->name('createContract');
         Route::post('/contract-store', 'Admin\ContractController@store')->name('storeContract');
         Route::get('/edit-contract/{id}', 'Admin\ContractController@edit')->name('editContract');
+        Route::get('/view-contract/{id}', 'Admin\ContractController@detail')->name('viewContract');
+
         Route::post('/update-contract/{id}', 'Admin\ContractController@update')->name('updateContract');
         Route::get('/delete-contract/{id}', 'Admin\ContractController@destroy')->name('deleteContract');
 

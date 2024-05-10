@@ -8,4 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class PropertyDripBatches extends Model
 {
     use HasFactory;
+    public function badge(){
+        return $this->belongsTo(Badge::class, 'badge_id', 'id');
+    }
 }

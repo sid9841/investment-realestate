@@ -80,17 +80,11 @@
                                             </span>
                                             @endif
                                         </div>
-                                        <div class="form-group col-md-12 col-12" >
+                                        <div class="form-group col-md-12 col-12">
                                             <label>Contract Type</label>
-                                            <select class="form-control  selectpicker currency-change"
-                                                    data-live-search="true" id="contract_type" name="contract_type"
-                                                    required="">
-                                                <option disabled selected>Nothing Selected</option>
-                                                @foreach($customers as $customer)
-                                                    <option value="{{$customer->id}}">{{$customer->fullname}}</option>
-
-                                                @endforeach
-                                            </select>
+                                            <input type="text" class="form-control "
+                                                   name="contract_type"
+                                                   value="{{ isset($contract) ? $contract->contract_type : old('contract_type') }}"  required="">
                                             <div class="invalid-feedback">
                                                 Please fill in the contract type
                                             </div>
@@ -100,6 +94,21 @@
                                             </span>
                                             @endif
                                         </div>
+                                        <div class="form-group col-md-12 col-12">
+                                            <label>Contract Content</label>
+                                            <input type="text" class="form-control "
+                                                   name="content"
+                                                   value="{{ isset($contract) ? $contract->content : old('content') }}"  required="">
+                                            <div class="invalid-feedback">
+                                                Please fill in the content
+                                            </div>
+                                            @if ($errors->has('content'))
+                                                <span class="invalid-text">
+                                                {{ $errors->first('content') }}
+                                            </span>
+                                            @endif
+                                        </div>
+
                                         <div class="form-group col-md-6 col-6">
                                             <label>Date</label>
                                             <input type="date" class="form-control "

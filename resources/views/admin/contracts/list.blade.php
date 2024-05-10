@@ -94,6 +94,10 @@
                                             <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
                                         </a>
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                            <a class="dropdown-item" href="{{ route('admin.viewContract',$contract->id) }}">
+                                                <i class="fa fa-eye text-info pr-2"
+                                                   aria-hidden="true"></i> @lang('View')
+                                            </a>
                                             <a class="dropdown-item" href="{{ route('admin.editContract',$contract->id) }}">
                                                 <i class="fa fa-edit text-warning pr-2"
                                                    aria-hidden="true"></i> @lang('Edit')

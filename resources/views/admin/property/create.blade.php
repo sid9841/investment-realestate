@@ -155,7 +155,7 @@
                                                 <td>
                                                     End Date
                                                 </td>
-                                            <td>Available For</td>
+                                                <td>Available For</td>
                                             </tr>
 
                                         </table>
@@ -783,6 +783,12 @@
 
             $('#add_drip').click(function (e){
                 e.preventDefault();
+                var selectedbadges = $('#drip_available_for').select2('data')
+                var badges = '';
+                selectedbadges.forEach(element=>{
+                    console.log(element.text)
+                    badges += ' ' + element.text
+                })
                 var start_date = $('#drip_start_date').val();
                 var end_date = $('#drip_end_date').val();
                 var available_for = $('#drip_available_for').val();
@@ -801,7 +807,7 @@
                 var html = '<tr>' +
                     '<td>'+start_date+'</td>' +
                     '<td>'+end_date+'</td>' +
-                    '<td>'+available_for+'</td>' +
+                    '<td>'+badges+'</td>' +
                     '<td><a href="#" class="btn btn-primary" id="drip_contents-'+id+'" onclick="delete_drip_body('+id+');return false;">Delete</a></td>' +
                     '</tr>';
                 $('#dripContentTable').append(html);

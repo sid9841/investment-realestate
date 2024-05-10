@@ -9,5 +9,9 @@ class Contract extends Model
 {
     use HasFactory;
     protected $guarded = ['id'];
+    public function customer()
+    {
+        return $this->belongsTo('App\Models\User','customer_id');
+    }
 
 }
