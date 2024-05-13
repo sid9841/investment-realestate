@@ -4,7 +4,7 @@
 @section('content')
     <div class="p-3">
         <div class="text-center">
-            <img src=" {{getFile(config('location.logoIcon.path').'favicon.png')}}" alt="wrapkit">
+            <img src=" {{getFile(config('location.logoIcon.path').'favicon.png')}}" style="max-width: 100%;" alt="wrapkit">
         </div>
         <h2 class="mt-3 text-center">@lang('Admin Login')</h2>
 
