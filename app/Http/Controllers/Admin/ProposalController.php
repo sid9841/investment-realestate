@@ -8,6 +8,8 @@ use App\Models\Items;
 use App\Models\Leads;
 use App\Models\Proposal;
 use App\Models\ProposalItem;
+use App\Models\Status;
+use App\Models\Tags;
 use App\Models\Task;
 use App\Models\User;
 use Carbon\Carbon;
@@ -36,7 +38,9 @@ class ProposalController extends Controller
         $customers = User::get();
         $admins = Admin::get();
         $items = Items::get();
-        return view('admin.proposals.create')->with(compact('leads','customers','admins','items'));
+        $status = Status::get();
+        $tags = Tags::get();
+        return view('admin.proposals.create')->with(compact('tags','status','leads','customers','admins','items'));
     }
     public function store(Request $request)
     {

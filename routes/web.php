@@ -312,6 +312,17 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
         Route::post('/proposal-store', 'Admin\ProposalController@store')->name('storeProposal');
         Route::get('/delete-proposal/{id}', 'Admin\ProposalController@destroy')->name('deleteProposal');
 
+        Route::get('/sales-setup', 'Admin\SalesSetupController@index')->name('sales-setup');
+        Route::post('/status-store', 'Admin\SalesSetupController@storeStatus')->name('storeStatus');
+        Route::get('/delete-status/{id}', 'Admin\SalesSetupController@destroyStatus')->name('deleteStatus');
+
+        Route::post('/tags-store', 'Admin\SalesSetupController@storeTags')->name('storeTags');
+        Route::get('/delete-tags/{id}', 'Admin\SalesSetupController@destroyTags')->name('deleteTags');
+
+        Route::post('/priority-store', 'Admin\SalesSetupController@storePriority')->name('storePriority');
+        Route::get('/delete-priority/{id}', 'Admin\SalesSetupController@destroyPriority')->name('deletePriority');
+
+
         Route::post('/getCustomerInfo', 'Admin\UsersController@getCustomerInfo')->name('getCustomerInfo');
 
 

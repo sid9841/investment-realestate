@@ -12,7 +12,7 @@
                 <!-- Currency Create Form  -->
                 <div class="card mb-4 shadow">
                     <div class="card-body">
-                        <iframe src="http://localhost/investment-realestate/laravel-filemanager" style="width: 100%; height: 500px; overflow: hidden; border: none;"></iframe>
+                        <iframe src="{{URL::to('/')}}/laravel-filemanager" style="width: 100%; height: 500px; overflow: hidden; border: none;"></iframe>
 
                     </div>
                 </div>

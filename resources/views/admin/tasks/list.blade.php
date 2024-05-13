@@ -77,14 +77,14 @@
                             <td data-label="@lang('Company')">@lang($task->subject)</td>
                             <td data-label="@lang('Status')">
                             <span
-                                class="custom-badge badge-pill {{ $task->status == 0 ? 'bg-danger' : 'bg-success' }}">{{ $task->status == 0 ? 'Inactive' : 'Active' }}</span>
+                                class="custom-badge badge-pill {{ $task->status == 0 ? 'bg-danger' : 'bg-success' }}">{{ $task->status == 0 ? 'Inactive' : $task->statusD->name }}</span>
                             </td>
                             <td data-label="@lang('Phone')">@lang($task->start_date)</td>
                             <td data-label="@lang('Phone')">@lang($task->due_date)</td>
-                                <td data-label="@lang('Assigned')">@lang($task->assigned_users)</td>
+                                <td data-label="@lang('Assigned')">@lang(@$task->assigned->name)</td>
 
-                            <td data-label="@lang('Tags')">@lang($task->tags)</td>
-                            <td data-label="@lang('Tags')">@lang($task->priority)</td>
+                            <td data-label="@lang('Tags')">@foreach($task->tags as $tag) {{$tag}} @endforeach</td>
+                            <td data-label="@lang('Tags')">@lang($task->priorityD->name)</td>
 
 
 
@@ -96,6 +96,10 @@
                                             <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
                                         </a>
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                            <a class="dropdown-item" onclick="viewTask({{$task->id}})">
+                                                <i class="fa fa-eye text-info pr-2"
+                                                   aria-hidden="true"></i> @lang('View')
+                                            </a>
                                             <a class="dropdown-item" onclick="editTask({{$task->id}})">
                                                 <i class="fa fa-edit text-warning pr-2"
                                                    aria-hidden="true"></i> @lang('Edit')
@@ -198,10 +202,11 @@
                                         data-live-search="true" id="priority" name="priority"
                                         required="">
                                     <option disabled selected>Nothing Selected</option>
-                                    @foreach($customers as $customer)
-                                        <option value="{{$customer->id}}">{{$customer->fullname}}</option>
-
+                                    @foreach($priority as $pt)
+                                        <option value="{{$pt->id}}">
+                                            {{$pt->name}}</option>
                                     @endforeach
+
                                 </select>
                                 <div class="invalid-feedback">
                                     Please fill in the contract type
@@ -219,7 +224,7 @@
                                         required="">
                                     <option disabled selected>Nothing Selected</option>
                                     @foreach($customers as $customer)
-                                        <option value="{{$customer->id}}">{{$customer->fullname}}</option>
+                                        <option value="{{$customer->id}}">{{$customer->name}}</option>
 
                                     @endforeach
                                 </select>
@@ -234,13 +239,13 @@
                             </div>
                             <div class="form-group col-md-12 col-12">
                                 <label>Tags</label>
-                                <select class="form-control  selectpicker currency-change"
-                                        data-live-search="true" name="tags"
+                                <select class="form-control  tags-selectpicker currency-change"
+                                        data-live-search="true" multiple name="tags[]"
                                         required="">
-                                    <option disabled selected>Nothing Selected</option>
-                                    <option value="bug">Bug</option>
-                                    <option value="follow-up">follow-up</option>
-                                    <option value="important">important</option>
+                                    @foreach($tags as $tag)
+                                        <option value="{{$tag->id}}" {{isset($estimate) ? (in_array($tag->id,$estimate->tags) ? 'selected' : '') : ''}}>
+                                            {{$tag->name}}</option>
+                                    @endforeach
                                 </select>
                                 <div class="invalid-feedback">
                                     Please fill in the assigned user
@@ -264,6 +269,18 @@
                                             </span>
                                 @endif
                             </div>
+                        </div>
+                        <div class="form-group col-md-12 col-12">
+                            <label>Attachment</label>
+                            <div class="input-group">
+                                   <span class="input-group-btn">
+                                     <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-primary">
+                                       <i class="fa fa-picture-o"></i> Choose
+                                     </a>
+                                   </span>
+                                <input id="thumbnail" class="form-control" type="text" name="filepath">
+                            </div>
+                            <div id="holder" style="margin-top:15px;max-height:100px;"></div>
                         </div>
 
 
@@ -355,14 +372,14 @@
                                             </span>
                                 @endif
                             </div>
-                            <div class="form-group col-md-6 col-6" >
+                            <div class="form-group col-md-4 col-6" >
                                 <label>Priority</label>
                                 <select id="editPriority" class="form-control  selectpicker currency-change"
                                         data-live-search="true" id="priority" name="priority"
                                         required="">
                                     <option disabled selected>Nothing Selected</option>
-                                    @foreach($customers as $customer)
-                                        <option value="{{$customer->id}}">{{$customer->fullname}}</option>
+                                    @foreach($priority as $pd)
+                                        <option value="{{$pd->id}}">{{$pd->name}}</option>
 
                                     @endforeach
                                 </select>
@@ -375,14 +392,34 @@
                                             </span>
                                 @endif
                             </div>
-                            <div class="form-group col-md-6 col-6" >
+                            <div class="form-group col-md-4 col-6" >
                                 <label>Assigned To</label>
                                 <select id="editAssignedTo" class="form-control  selectpicker currency-change"
-                                        data-live-search="true" id="assigned_to" name="assigned_to"
+                                        data-live-search="true"  name="assigned_to"
                                         required="">
                                     <option disabled selected>Nothing Selected</option>
                                     @foreach($customers as $customer)
-                                        <option value="{{$customer->id}}">{{$customer->fullname}}</option>
+                                        <option value="{{$customer->id}}">{{$customer->name}}</option>
+
+                                    @endforeach
+                                </select>
+                                <div class="invalid-feedback">
+                                    Please fill in the contract type
+                                </div>
+                                @if ($errors->has('contract_type'))
+                                    <span class="invalid-text">
+                                                {{ $errors->first('contract_type') }}
+                                            </span>
+                                @endif
+                            </div>
+                            <div class="form-group col-md-4 col-6" >
+                                <label>Status</label>
+                                <select id="editStatus" class="form-control  selectpicker currency-change"
+                                        data-live-search="true"  name="status"
+                                        required="">
+                                    <option disabled selected>Nothing Selected</option>
+                                    @foreach($status as $st)
+                                        <option value="{{$st->id}}">{{$st->name}}</option>
 
                                     @endforeach
                                 </select>
@@ -397,13 +434,12 @@
                             </div>
                             <div class="form-group col-md-12 col-12">
                                 <label>Tags</label>
-                                <select id="editTags" class="form-control  selectpicker currency-change"
-                                        data-live-search="true" name="tags"
+                                <select id="editTags" class="form-control tags-selectpicker currency-change"
+                                        data-live-search="true" multiple name="tags[]"
                                         required="">
-                                    <option disabled selected>Nothing Selected</option>
-                                    <option value="bug">Bug</option>
-                                    <option value="follow-up">follow-up</option>
-                                    <option value="important">important</option>
+                                   @foreach($tags as $tg)
+                                       <option value="{{$tg->id}}">{{$tg->name}}</option>
+                                   @endforeach
                                 </select>
                                 <div class="invalid-feedback">
                                     Please fill in the assigned user
@@ -427,10 +463,20 @@
                                             </span>
                                 @endif
                             </div>
+                            <div class="form-group col-md-12 col-12">
+                                <label>Attachment</label>
+                                <div class="input-group">
+                                   <span class="input-group-btn">
+                                     <a id="lfm-edit" data-input="thumbnail-edit" data-preview="holder-edit" class="btn btn-primary">
+                                       <i class="fa fa-picture-o"></i> Choose
+                                     </a>
+                                   </span>
+                                    <input id="thumbnail-edit" class="form-control" type="text" name="filepath">
+                                </div>
+                                <div id="holder-edit" style="margin-top:15px;max-height:100px;"></div>
+                            </div>
+
                         </div>
-
-
-
                     </div>
                     <!-- Modal footer -->
                     <div class="modal-footer">
@@ -445,6 +491,21 @@
         </div>
     </div>
 
+    <div class="modal fade" id="viewLead">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header modal-colored-header bg-primary">
+                <h4 class="modal-title">@lang('View Task')</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body" id="taskDetails">
+
+            </div>
+            </div>
+        </div>
+    </div>
 
     <div class="modal fade" id="all_active" role="dialog">
         <div class="modal-dialog">
@@ -487,33 +548,6 @@
         </div>
     </div>
 
-    <!-- Admin Login as a User Modal -->
-    <div class="modal fade" id="signIn">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <form method="post" action="" class="loginAccountAction" enctype="multipart/form-data">
-                    @csrf
-                    <!-- Modal Header -->
-                    <div class="modal-header modal-colored-header bg-primary">
-                        <h4 class="modal-title">@lang('Sing In Confirmation')</h4>
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    </div>
-                    <!-- Modal body -->
-                    <div class="modal-body">
-                        <p>@lang('Are you sure to sign in this account?')</p>
-                    </div>
-                    <!-- Modal footer -->
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-light" data-dismiss="modal"><span>@lang('Close')</span>
-                        </button>
-                        <button type="submit" class=" btn btn-primary "><span>@lang('Yes')</span>
-                        </button>
-                    </div>
-
-                </form>
-            </div>
-        </div>
-    </div>
 
 @endsection
 
@@ -587,10 +621,34 @@
                     $('#editTags').val(data.tags).trigger('change')
                     $('#editDescription').val(data.task_description)
                     $('#updateTaskForm').attr('action','update-task/'+id);
-
+                    $('#thumbnail-edit').val(data.filepath)
+                    $('#editStatus').val(data.status).trigger('change')
                 },
             });
             $('#editLead').modal('show');
+        }
+        function viewTask(id) {
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                url: "{{ route('admin.getTaskInfo') }}",
+                type: "POST",
+                data: {
+                    dataid:  id,
+                },
+                success: function (data) {
+                   var taskInfo =  generateLeadView(data);
+                   $('#taskDetails').html(taskInfo);
+
+                },
+            });
+            $('#viewLead').modal('show');
+
         }
         //multiple deactive
         $(document).on('click', '.inactive-yes', function (e) {
@@ -618,7 +676,10 @@
             var route = $(this).data('route');
             $('.loginAccountAction').attr('action', route)
         });
-
+        $('.tags-selectpicker').select2({
+            width: '100%',
+            placeholder: '@lang("Select Tags")',
+        });
         $('select').select2({
             selectOnClose: true,
             width: '100%'
@@ -627,6 +688,40 @@
         $('.from_date').on('change', function (){
             $('.to_date').removeAttr('disabled');
         });
+        function generateLeadView(data){
+            console.log(data);
+            var html = '<div class="row"> ' +
+                '<div class="col-md-8 task-single-col-left" > <div class="task-single-related-wrapper"> ' +
+                '<h4 class="bold font-medium mbot15 tw-mt-0">'+data.subject+'</h4> ' +
+                '<h4 class="bold font-medium mbot15 tw-mt-0">Assigned To: '+data.assigned.name+'</h4> ' +
+                '</div> <div class="clearfix"></div> <hr class="hr-10"> ' +
+                '<h4 class="th tw-font-semibold tw-text-base mbot15 pull-left">Description</h4> <div class="clearfix"> </div> <hr>' +
+                '<p>'+data.task_description+'</p>' +
+                '<hr class="hr-10"> ' +
+                '<h4 class="th tw-font-semibold tw-text-base mbot15 pull-left">Attachment</h4> <div class="clearfix"> </div> <hr>' +
+                '<img style="max-width: 100%;" src="'+data.filepath+'"> </div> ' +
+                '<div class="col-md-4 task-single-col-right"> ' +
+                '<h4 class="task-info-heading tw-font-medium tw-text-base tw-mb-0 tw-text-neutral-800">Task Info        </h4> ' +
+                '<div class="clearfix"></div> <p class="tw-mb-0 task-info-created tw-text-sm"> ' +
+                // '<span class="tw-text-neutral-500">Created by <span class="tw-text-neutral-600">'+data.+'</span>                <i class="fa-regular fa-clock" data-toggle="tooltip" data-title="Created at 2024-05-12 14:00:07"></i></span> <br>' +
+                '</p> <hr class="task-info-separator"> <div class="task-info task-status task-info-status"> <h5 class="tw-inline-flex tw-items-center tw-space-x-1.5"> ' +
+                '<i class="fa-regular fa-star fa-fw fa-lg pull-left task-info-icon"></i>Status: '+data.status+'</h5></div>' +
+                '<div class="task-info task-single-inline-wrap task-info-start-date"> <h5 class="tw-inline-flex tw-items-center tw-space-x-1.5"> <div class="tw-shrink-0 tw-grow"> <i class="fa-regular fa-calendar fa-fw fa-lg fa-margin task-info-icon pull-left tw-mt-2"></i>' +
+                'Start Date:' +data.start_date+'</div> </h5> </div> <div class="task-info task-info-due-date task-single-inline-wrap"> <h5 class="tw-inline-flex tw-items-center tw-space-x-1.5"> <div class="tw-shrink-0 tw-grow"> <i class="fa-regular fa-calendar-check fa-fw fa-lg task-info-icon pull-left tw-mt-2"></i>' +
+                'Due Date:' +data.due_date+' </div> </h5> </div> <div class="task-info task-info-priority"> ' +
+                '<h5 class="tw-inline-flex tw-items-center tw-space-x-1.5"> ' +
+                '<i class="fa fa-bolt fa-fw fa-lg task-info-icon pull-left"></i>Priority: <span class="task-single-menu task-menu-priority"> <span class="trigger pointer manual-popover text-has-action" style="color:#03a9f4;" data-original-title="" title="">' +
+                data.priority_d.name+' </span> </span> </h5> </div> <div class="task-info task-info-hourly-rate"> <h5 class="tw-inline-flex tw-items-center tw-space-x-1.5"> <i class="fa-regular fa-clock fa-fw fa-lg task-info-icon pull-left"></i>' +
+                'Hourly Rate: <span class="tw-text-neutral-800">' +data.hourly_rate +'                   </span> </h5> </div> <div class="mtop10 clearfix"></div> ' +
+                '<hr class="task-info-separator"> <div class="clearfix"></div> </div> </div>';
+                return html;
+        }
 
+    </script>
+    <script src="{{asset('assets/vendor/laravel-filemanager/js/stand-alone-button.js')}}"></script>
+    <script>
+        var route_prefix = '{{URL::to('/')}}/laravel-filemanager';
+        $('#lfm').filemanager('file',{prefix: route_prefix});
+        $('#lfm-edit').filemanager('file',{prefix: route_prefix});
     </script>
 @endpush

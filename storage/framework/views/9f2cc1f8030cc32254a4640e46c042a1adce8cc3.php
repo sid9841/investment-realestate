@@ -256,6 +256,12 @@
                                 <span class="hide-menu"><?php echo app('translator')->get('Tasks'); ?></span>
                             </a>
                         </li>
+                        <li class="sidebar-item <?php echo e(menuActive(['admin.sales-setup'],3)); ?>">
+                            <a class="sidebar-link" href="<?php echo e(route('admin.sales-setup')); ?>" aria-expanded="false">
+                                <i class="fas fa-users text-info"></i>
+                                <span class="hide-menu"><?php echo app('translator')->get('Setup Sales'); ?></span>
+                            </a>
+                        </li>
 
                     <?php endif; ?>
                     <?php if(adminAccessRoute(config('role.manage_user.access.view'))): ?>

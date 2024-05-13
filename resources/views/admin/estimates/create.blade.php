@@ -99,9 +99,10 @@
                                                     data-live-search="true" name="tags"
                                                     required="">
                                                 <option readonly selected>Nothing Selected</option>
-                                                <option value="bug" {{@$estimate->tags == 'bug' ? 'selected' : ''}}>Bug</option>
-                                                <option value="follow-up" {{@$estimate->tags == 'follow-up' ? 'selected' : ''}}>follow-up</option>
-                                                <option value="important" {{@$estimate->tags == 'important' ? 'selected' : ''}}>important</option>
+                                                @foreach($tags as $tag)
+                                                    <option value="{{$tag->id}}" {{isset($estimate) ? (in_array($tag->id,$estimate->tags) ? 'selected' : '') : ''}}>
+                                                        {{$tag->name}}</option>
+                                                @endforeach
                                             </select>
                                             <div class="invalid-feedback">
                                                 Please fill in the assigned user
@@ -124,10 +125,10 @@
                                                         data-live-search="true" name="status"
                                                         required="">
                                                     <option readonly selected>Nothing Selected</option>
-                                                    <option value="1" {{@$estimate->status == '1' ? 'selected' : ''}}>Draft</option>
-                                                    <option value="2" {{@$estimate->status == '2' ? 'selected' : ''}}>Sent</option>
-                                                    <option value="3" {{@$estimate->status == '3' ? 'selected' : ''}}>Open</option>
-                                                    <option value="4" {{@$estimate->status == '4' ? 'selected' : ''}}>Done</option>
+                                                    @foreach($status as $st)
+                                                        <option value="{{$st->id}}" {{@$proposal->status == $st->id ? 'selected' : ''}}>
+                                                            {{$st->name}}</option>
+                                                    @endforeach
                                                 </select>
                                                 <div class="invalid-feedback">
                                                     Please fill in the status

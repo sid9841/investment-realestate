@@ -100,10 +100,10 @@
                                             <select class="form-control  tags-selectpicker currency-change"
                                                     data-live-search="true" multiple name="tags[]"
                                                     required="">
-                                                <option readonly="">Nothing Selected</option>
-                                                <option value="bug" {{isset($invoice) ? (in_array('bug',$invoice->tags) ? 'selected' : '') : ''}}>Bug</option>
-                                                <option value="follow-up" {{isset($invoice) ? (in_array('follow-up',$invoice->tags) ? 'selected' : '') : ''}}>follow-up</option>
-                                                <option value="important" {{isset($invoice) ? (in_array('important',$invoice->tags) ? 'selected' : '') : ''}}>important</option>
+                                                @foreach($tags as $tag)
+                                                    <option value="{{$tag->id}}" {{isset($estimate) ? (in_array($tag->id,$estimate->tags) ? 'selected' : '') : ''}}>
+                                                        {{$tag->name}}</option>
+                                                @endforeach
                                             </select>
                                             <div class="invalid-feedback">
                                                 Please fill in the assigned user
@@ -126,10 +126,10 @@
                                                         data-live-search="true" name="status"
                                                         required="">
                                                     <option disabled selected>Nothing Selected</option>
-                                                    <option {{@$invoice->status == '1' ? 'selected' : ''}} value="1">Draft</option>
-                                                    <option {{@$invoice->status == '2' ? 'selected' : ''}} value="2">Sent</option>
-                                                    <option {{@$invoice->status == '3' ? 'selected' : ''}} value="3">Open</option>
-                                                    <option {{@$invoice->status == '4' ? 'selected' : ''}} value="4">Done</option>
+                                                    @foreach($status as $st)
+                                                        <option value="{{$st->id}}" {{@$invoice->status == $st->id ? 'selected' : ''}}>
+                                                            {{$st->name}}</option>
+                                                    @endforeach
                                                 </select>
                                                 <div class="invalid-feedback">
                                                     Please fill in the status

@@ -187,12 +187,13 @@
                                                     <select class="form-control tags-selectpicker currency-change"
                                                             data-live-search="true" name="tags[]" multiple
                                                             required="">
-                                                        <option value="bug" {{isset($proposal) ? (in_array('bug',$proposal->tags) ? 'selected' : '') : ''}}>Bug</option>
-                                                        <option value="follow-up" {{isset($proposal) ? (in_array('follow-up',$proposal->tags) ? 'selected' : '') : ''}}>follow-up</option>
-                                                        <option value="important" {{isset($proposal) ? (in_array('important',$proposal->tags) ? 'selected' : '') : ''}}>important</option>
+                                                        @foreach($tags as $tag)
+                                                        <option value="{{$tag->id}}" {{isset($proposal) ? (in_array($tag->id,$proposal->tags) ? 'selected' : '') : ''}}>
+                                                            {{$tag->name}}</option>
+                                                        @endforeach
                                                     </select>
                                                     <div class="invalid-feedback">
-                                                        Please fill in the assigned user
+                                                        Please fill in the tags
                                                     </div>
                                                     @if ($errors->has('tags'))
                                                         <span class="invalid-text">
@@ -212,10 +213,11 @@
                                                         data-live-search="true" name="status"
                                                         required="">
                                                     <option readonly selected>Nothing Selected</option>
-                                                    <option value="1" {{@$proposal->status == 1 ? 'selected' : ''}}>Draft</option>
-                                                    <option value="2" {{@$proposal->status == 2 ? 'selected' : ''}}>Sent</option>
-                                                    <option value="3" {{@$proposal->status == 3 ? 'selected' : ''}}>Open</option>
-                                                    <option value="4" {{@$proposal->status == 4 ? 'selected' : ''}}>Done</option>
+                                                    @foreach($status as $st)
+                                                    <option value="{{$st->id}}" {{@$proposal->status == $st->id ? 'selected' : ''}}>
+                                                        {{$st->name}}</option>
+                                                    @endforeach
+
                                                 </select>
                                                 <div class="invalid-feedback">
                                                     Please fill in the status

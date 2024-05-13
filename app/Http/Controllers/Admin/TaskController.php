@@ -3,7 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Admin;
 use App\Models\Contract;
+use App\Models\Priority;
+use App\Models\Status;
+use App\Models\Tags;
 use App\Models\Task;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -22,9 +26,12 @@ class TaskController extends Controller
 
     public function index()
     {
-        $customers = User::get();
+        $customers = Admin::get();
+        $priority = Priority::get();
+        $tags = Tags::get();
+        $status = Status::get();
         $tasks = Task::orderBy('id', 'DESC')->paginate(config('basic.paginate'));
-        return view('admin.tasks.list', compact('tasks','customers'));
+        return view('admin.tasks.list', compact('tasks','customers','priority','tags','status'));
     }
     public function store(Request $request)
     {
@@ -35,9 +42,10 @@ class TaskController extends Controller
                 'hourly_rate'=>$reqData['hourly_rate'],
                 'start_date'=>$reqData['issue_date'],
                 'due_date'=>$reqData['open_till_date'],
-                'assigned_to'=>$reqData['assigned_to'],
+                'assigned_users'=>$reqData['assigned_to'],
                 'tags'=>$reqData['tags'],
                 'priority'=>$reqData['priority'],
+                'filepath'=>$reqData['filepath'],
                 'task_description'=>$reqData['description'],
                 'status'=>0,
             ]
@@ -47,7 +55,7 @@ class TaskController extends Controller
 
     }
     public function getTaskInfo(Request $request){
-        $task = Task::find($request->dataid);
+        $task = Task::with('statusD','priorityD','assigned')->find($request->dataid);
         return $task;
 
     }
@@ -61,11 +69,12 @@ class TaskController extends Controller
                 'hourly_rate'=>$reqData['hourly_rate'],
                 'start_date'=>$reqData['issue_date'],
                 'due_date'=>$reqData['open_till_date'],
-                'assigned_to'=>$reqData['assigned_to'],
+                'assigned_users'=>$reqData['assigned_to'],
                 'tags'=>$reqData['tags'],
                 'priority'=>$reqData['priority'],
+                'filepath'=>$reqData['filepath'],
                 'task_description'=>$reqData['description'],
-                'status'=>0,
+                'status'=>$reqData['status'],
             ]
 
         );

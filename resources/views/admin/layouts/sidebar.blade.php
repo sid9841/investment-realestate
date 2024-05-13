@@ -256,6 +256,12 @@
                                 <span class="hide-menu">@lang('Tasks')</span>
                             </a>
                         </li>
+                        <li class="sidebar-item {{menuActive(['admin.sales-setup'],3)}}">
+                            <a class="sidebar-link" href="{{ route('admin.sales-setup') }}" aria-expanded="false">
+                                <i class="fas fa-users text-info"></i>
+                                <span class="hide-menu">@lang('Setup Sales')</span>
+                            </a>
+                        </li>
 
                     @endif
                     @if(adminAccessRoute(config('role.manage_user.access.view')))
