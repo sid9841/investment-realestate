@@ -106,6 +106,13 @@
       0 => 'Laravel\\Ui\\UiServiceProvider',
     ),
   ),
+  'marshmallow/laravel-facebook-webhook' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Marshmallow\\LaravelFacebookWebhook\\LaravelFacebookWebhookServiceProvider',
+    ),
+  ),
   'mollie/laravel-mollie' => 
   array (
     'providers' => 
@@ -140,6 +147,20 @@
     'providers' => 
     array (
       0 => 'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider',
+    ),
+  ),
+  'socialiteproviders/manager' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'SocialiteProviders\\Manager\\ServiceProvider',
+    ),
+  ),
+  'spatie/laravel-webhook-client' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Spatie\\WebhookClient\\WebhookClientServiceProvider',
     ),
   ),
   'stevebauman/purify' => 

@@ -16,6 +16,7 @@ Route::get('migrate', function () {
 });
 
 Route::get('/user', 'Auth\LoginController@showLoginForm')->name('login');
+Route::get('/facebook/callback', 'WebhookController@handleFbLeads')->name('handleFbLeads');
 Route::post('/loginModal', 'Auth\LoginController@loginModal')->name('loginModal');
 
 Route::get('queue-work', function () {
