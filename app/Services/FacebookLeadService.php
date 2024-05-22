@@ -88,7 +88,7 @@ class FacebookLeadService {
                         'name' => 'platform',
                         'values' => [ 'fb' ]
                     ];
-
+                    $this->log->notice($fieldData);
                     /**
                      * Here your logic will be gone...
                      */
