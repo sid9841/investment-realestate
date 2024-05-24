@@ -17,6 +17,8 @@ Route::get('migrate', function () {
 
 Route::get('/user', 'Auth\LoginController@showLoginForm')->name('login');
 Route::get('/facebook/callback', 'WebhookController@handleFbLeads')->name('handleFbLeads');
+Route::get('/google/redirect', [App\Http\Controllers\GoogleLoginController::class, 'redirectToGoogle'])->name('google.redirect');
+Route::get('/google/callback', [App\Http\Controllers\GoogleLoginController::class, 'handleGoogleCallback'])->name('google.callback');
 Route::post('/loginModal', 'Auth\LoginController@loginModal')->name('loginModal');
 
 Route::get('queue-work', function () {

@@ -19,7 +19,7 @@
         "ixudra/curl": "^6.21",
         "jlang/jsonstringfy": "^3.5",
         "laravel/framework": "^8.12",
-        "laravel/socialite": "^5.2",
+        "laravel/socialite": "^5.14",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.2",
         "marshmallow/laravel-facebook-webhook": "^2.1",

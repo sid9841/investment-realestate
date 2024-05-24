@@ -108,6 +108,8 @@ unset($__errorArgs, $__bag); ?>
                                     <a href="<?php echo e(route('register')); ?>"><?php echo app('translator')->get('Create account'); ?></a>
                                 </div>
                             </form>
+                            <a href="<?php echo e(route('google.redirect')); ?>" class="btn btn-primary"> Login with Google </a>
+
                         </div>
                     </div>
                 </div>
